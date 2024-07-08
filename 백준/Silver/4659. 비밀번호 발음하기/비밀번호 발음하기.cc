@@ -35,19 +35,10 @@ int main()
                 break;
             }
 
-            // if (pre == s[i])
-            // {
-            //     if (pre != 'e' && pre != 'o')
-            //     {
-            //         flag = false;
-            //         break;
-            //     }
-            // }
-            if (pre && s[i] != 'e' && s[i] != 'o')
+            if (pre == s[i])
             {
-                if (pre == s[i])
+                if (pre != 'e' && pre != 'o')
                 {
-                    // cout << "ai" << '\n';
                     flag = false;
                     break;
                 }
