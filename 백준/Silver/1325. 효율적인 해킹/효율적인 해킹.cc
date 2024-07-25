@@ -1,44 +1,68 @@
 #include <bits/stdc++.h>
 using namespace std;
-
-vector<int> v[10001];
+vector<int> v[10004];
 int n, m;
-int visited[10001];
-int dp[10001];
-int mx = -1;
-int dfs(int n)
-{
-    visited[n] = 1;
-    int ret = 1;
+int a, b;
+int dp[10004];
+map<int, int> mp;
+int visited[10004];
 
-    for (int i = 0; i < v[n].size(); i++)
+int dfs(int num)
+{
+    // cout << "num : " << num << "\n";
+    // if (dp[num])
+    // {
+    //     return dp[num];
+    // }
+    visited[num] = 1;
+    int ret = 1;
+    for (int i = 0; i < v[num].size(); i++)
     {
-        if (!visited[v[n][i]])
+        int next = v[num][i];
+        if (visited[next])
         {
-            ret += dfs(v[n][i]);
+            continue;
         }
+
+        // visited[next] = 1;
+        ret += dfs(next);
     }
+    // dp[num] = ret;
     return ret;
 }
 
 int main()
 {
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
     cin >> n >> m;
     for (int i = 0; i < m; i++)
     {
-        int a, b;
         cin >> a >> b;
         v[b].push_back(a);
     }
 
-    vector<pair<int, int>> answer;
+    int mx = -1;
 
     for (int i = 1; i <= n; i++)
     {
         memset(visited, 0, sizeof(visited));
-        dp[i] = dfs(i);
-        mx = max(dp[i], mx);
+        int tmp = dfs(i);
+        // cout << "num : " << i << ", tmp : " << tmp << "\n";
+        dp[i] = tmp;
+        if (tmp > mx)
+        {
+            mx = tmp;
+        }
     }
+
+    // for (int i = 1; i <= n; i++)
+    // {
+    //     cout << dp[i] << " ";
+    // }
+    // cout << "---------\n";
+
     for (int i = 1; i <= n; i++)
     {
         if (dp[i] == mx)
@@ -58,7 +82,6 @@ int main()
 5 3
 2 1
 4 2
-
 답 : 1
 
 6 6
@@ -68,7 +91,5 @@ int main()
 4 3
 3 6
 6 5
-
 답 1 5
-
 */
