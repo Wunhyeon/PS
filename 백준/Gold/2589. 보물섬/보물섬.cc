@@ -1,78 +1,74 @@
 #include <bits/stdc++.h>
 using namespace std;
-int n, m;
+char c[54][54];
 string s;
-char a[54][54];
-int mx = 0;
-int visited[54][54];
-int dirY[4] = {1, -1, 0, 0};
-int dirX[4] = {0, 0, 1, -1};
-void print()
-{
-    for (int i = 0; i < n; i++)
-    {
-        for (int j = 0; j < m; j++)
-        {
-            cout << a[i][j] << " ";
-        }
-        cout << "\n";
-    }
-}
+int y, x;
 
-void bfs(int y, int x)
+vector<int> dirY = {1, -1, 0, 0};
+vector<int> dirX = {0, 0, 1, -1};
+
+int visited[54][54];
+
+int bfs(pair<int, int> d)
 {
+
+    memset(visited, 0, sizeof(visited));
+
     queue<pair<int, int>> q;
-    visited[y][x] = 1;
-    q.push({y, x});
+    q.push(d);
+    visited[d.first][d.second] = 1;
+
+    int mm = 0;
     while (q.size())
     {
         int curY = q.front().first;
         int curX = q.front().second;
-        int curCnt = visited[curY][curX];
+        int curDepth = visited[curY][curX];
         q.pop();
 
-        mx = max(mx, curCnt);
         for (int i = 0; i < 4; i++)
         {
             int nextY = curY + dirY[i];
             int nextX = curX + dirX[i];
-            if (nextY >= 0 && nextY < n && nextX >= 0 && nextX < m && (!visited[nextY][nextX] || curCnt + 1 < visited[nextY][nextX]) && a[nextY][nextX] == 'L')
+            int nextDepth = curDepth + 1;
+            if (nextY >= 0 && nextY < y && nextX >= 0 && nextX < x && (!visited[nextY][nextX] || visited[nextY][nextX] > nextDepth) && c[nextY][nextX] == 'L')
             {
+                visited[nextY][nextX] = nextDepth;
                 q.push({nextY, nextX});
-                visited[nextY][nextX] = curCnt + 1;
+            }
+            else
+            {
+                mm = curDepth;
             }
         }
     }
+    return mm - 1;
 }
 
 int main()
 {
-    cin >> n >> m;
-    for (int i = 0; i < n; i++)
+    cin >> y >> x;
+    for (int i = 0; i < y; i++)
     {
         cin >> s;
-        for (int j = 0; j < s.size(); j++)
+        for (int j = 0; j < x; j++)
         {
-            a[i][j] = s[j];
+            c[i][j] = s[j];
         }
     }
-
-    // cout << "input end" << "\n";
-    // print();
-
-    for (int i = 0; i < n; i++)
+    int ans = 0;
+    for (int i = 0; i < y; i++)
     {
-        for (int j = 0; j < m; j++)
+        for (int j = 0; j < x; j++)
         {
-            if (a[i][j] == 'L')
+            if (c[i][j] == 'L')
             {
-                memset(visited, 0, sizeof(visited));
-                bfs(i, j);
+                int tmp = bfs({i, j});
+                ans = max(tmp, ans);
             }
         }
     }
 
-    cout << mx - 1 << "\n";
-
+    cout << ans << "\n";
     return 0;
 }
